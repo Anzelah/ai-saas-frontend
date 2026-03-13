@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import Success from "./success";
-import Cancel from "./cancel";
 
 const BACKEND_URL = "https://ai-saas-backend-f8bt.onrender.com";
 const PRIMARY_BLUE = "#1e3a8a";
