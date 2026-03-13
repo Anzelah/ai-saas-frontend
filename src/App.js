@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import Success from "./success";
+import Cancel from "./cancel";
 
 const BACKEND_URL = "https://ai-saas-backend-f8bt.onrender.com";
 const PRIMARY_BLUE = "#1e3a8a";
@@ -228,6 +230,22 @@ export default function App() {
       handleError(err);
     }
   };
+
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const stripeStatus = params.get("stripe");
+  
+    if (stripeStatus === "success") {
+      setSuccess("Payment successful! Your credits have been updated.");
+    } else if (stripeStatus === "cancel") {
+      setError("Payment canceled. No credits were added.");
+    }
+  
+    // Remove the query string from URL so it doesn't show again on refresh
+    if (stripeStatus) {
+      window.history.replaceState(null, "", "/dashboard");
+    }
+  }, []);
 
   const logout = () => {
     localStorage.removeItem("token");
@@ -477,6 +495,40 @@ export default function App() {
   if (view === "dashboard") {
     return (
       <div style={{ maxWidth: "820px", margin: "60px auto", fontFamily: "system-ui" }}>
+
+        {/* ✅ Stripe popup notifications */}
+        {success && (
+          <div style={{
+            position: "fixed",
+            top: "20px",
+            right: "20px",
+            background: "#16a34a", // green for success
+            color: "white",
+            padding: "12px 20px",
+            borderRadius: "8px",
+            boxShadow: "0 4px 12px rgba(0,0,0,0.2)",
+            zIndex: 1000,
+          }}>
+            {success}
+          </div>
+        )}
+
+        {error && (
+          <div style={{
+            position: "fixed",
+            top: "20px",
+            right: "20px",
+            background: "#dc2626", // red for error
+            color: "white",
+            padding: "12px 20px",
+            borderRadius: "8px",
+            boxShadow: "0 4px 12px rgba(0,0,0,0.2)",
+            zIndex: 1000,
+          }}>
+            {error}
+          </div> // added until here
+        )} 
+
         <h2 style={{ color: PRIMARY_BLUE }}>Dashboard</h2>
 
         {user && <p><strong>Credits:</strong> {user.credits}</p>}
