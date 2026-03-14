@@ -563,7 +563,19 @@ export default function App() {
               Logout
             </button>
           </div>
-  
+
+          {/* Heading area */}
+          <div style={{ textAlign: "center", marginTop: "30px", marginBottom: "30px" }}>
+            <h2 style={{ color: PRIMARY_BLUE, marginBottom: "6px" }}>
+            Generate professional business plans in seconds
+            </h2>
+
+            {user && (
+              <div style={{ color: "#555", fontSize: "14px" }}>
+                Credits remaining: <strong>{user.credits}</strong>
+              </div>
+            )}
+          </div>
   
           {/* Response area */}
           <div style={{ flex: 1, marginTop: "30px", overflowY: "auto" }}>
