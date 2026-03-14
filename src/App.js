@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 
 const BACKEND_URL = "https://ai-saas-backend-f8bt.onrender.com";
-const PRIMARY_BLUE = "#1e3a8a";
+const BLUE = "#1e3a8a";
 
 export default function App() {
   const [view, setView] = useState("login");
