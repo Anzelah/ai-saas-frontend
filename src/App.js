@@ -492,143 +492,218 @@ export default function App() {
 
   if (view === "dashboard") {
     return (
-      <div style={{ maxWidth: "820px", margin: "60px auto", fontFamily: "system-ui" }}>
-
-        {/* ✅ Stripe popup notifications */}
-        {success && (
-          <div style={{
-            position: "fixed",
-            top: "20px",
-            right: "20px",
-            background: "#16a34a", // green for success
-            color: "white",
-            padding: "12px 20px",
-            borderRadius: "8px",
-            boxShadow: "0 4px 12px rgba(0,0,0,0.2)",
-            zIndex: 1000,
-          }}>
-            {success}
-          </div>
-        )}
-
-        {error && (
-          <div style={{
-            position: "fixed",
-            top: "20px",
-            right: "20px",
-            background: "#dc2626", // red for error
-            color: "white",
-            padding: "12px 20px",
-            borderRadius: "8px",
-            boxShadow: "0 4px 12px rgba(0,0,0,0.2)",
-            zIndex: 1000,
-          }}>
-            {error}
-          </div> // added until here
-        )} 
-
-        <h2 style={{ color: PRIMARY_BLUE }}>Dashboard</h2>
-
-        {user && <p><strong>Credits:</strong> {user.credits}</p>}
-
-        <textarea
-          style={{ ...input, height: "80px" }}
-          placeholder="Ask AI something..."
-          value={prompt}
-          onChange={(e) => setPrompt(e.target.value)}
-        />
-
-        <button style={primaryButton} onClick={sendPrompt}>
-          Send
-        </button>
-
-        {response && (
-          <div style={{ marginTop: "20px" }}>
-            <strong>Response</strong>
-            <p>{response}</p>
-          </div>
-        )}
-
-        <h3 style={{ marginTop: "30px", color: PRIMARY_BLUE }}>History</h3>
-
-        {history.map((item, i) => (
-          <div
-            key={i}
-            onClick={() => fetchRequestById(item.id)} // fetch full response when clicked
-            style={{
-              marginBottom: "16px",
-              padding: "12px",
-              background: "#f1f5f9",
-              borderRadius: "6px",
-              cursor: "pointer", // shows it’s clickable
-            }}
-          >
-            <strong>Prompt:</strong>
-            <p>{item.prompt}</p>
-            <div style={{ fontSize: "12px", color: "#666" }}>
-              {new Date(item.createdAt).toLocaleString()}
-            </div>
-          </div>
-        ))}
-
-        {loadingExpanded && <div>Loading...</div>}
-
-        {expandedRequest && (
-          <div
-            style={{
-              marginTop: "16px",
-              padding: "12px",
-              background: "#e6f0ff", // subtle highlighted box
-              borderRadius: "6px",
-              boxShadow: "0 2px 6px rgba(0,0,0,0.1)",
-            }}
-          >
-            <strong>Prompt:</strong>
-            <p>{expandedRequest.prompt}</p>
-            <strong>Response:</strong>
-            <p>{expandedRequest.response}</p>
-            <button
-              onClick={() => setExpandedRequest(null)}
-              style={{ marginTop: "8px", cursor: "pointer" }}
+      <div style={{ display: "flex", height: "100vh", fontFamily: "system-ui" }}>
+  
+        {/* Sidebar History */}
+        <div
+          style={{
+            width: "260px",
+            background: "#f8fafc",
+            borderRight: "1px solid #e5e7eb",
+            padding: "16px",
+            overflowY: "auto"
+          }}
+        >
+          <h3 style={{ color: PRIMARY_BLUE, marginBottom: "12px" }}>History</h3>
+  
+          {history.map((item, i) => (
+            <div
+              key={i}
+              onClick={() => fetchRequestById(item.id)}
+              style={{
+                padding: "10px",
+                marginBottom: "10px",
+                background: "white",
+                borderRadius: "6px",
+                cursor: "pointer",
+                boxShadow: "0 2px 6px rgba(0,0,0,0.05)"
+              }}
             >
-              Close
+              <div style={{ fontSize: "13px", fontWeight: "600" }}>
+                {item.prompt.slice(0, 40)}...
+              </div>
+  
+              <div style={{ fontSize: "11px", color: "#666" }}>
+                {new Date(item.createdAt).toLocaleString()}
+              </div>
+            </div>
+          ))}
+        </div>
+  
+        {/* Main Chat Area */}
+        <div
+          style={{
+            flex: 1,
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "space-between",
+            padding: "30px",
+            maxWidth: "900px",
+            margin: "0 auto"
+          }}
+        >
+  
+          {/* Top bar */}
+          <div style={{ display: "flex", justifyContent: "space-between" }}>
+            <div>
+              {user && <strong>Credits: {user.credits}</strong>}
+            </div>
+  
+            <button
+              onClick={logout}
+              style={{
+                border: "none",
+                background: "#374151",
+                color: "white",
+                padding: "8px 14px",
+                borderRadius: "6px",
+                cursor: "pointer"
+              }}
+            >
+              Logout
             </button>
           </div>
-        )}
-
-        <h3 style={{ marginTop: "40px", color: PRIMARY_BLUE }}>Upgrade Plan</h3>
-
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: "20px" }}>
-
-          <div style={planCard("#22c55e")}>
-            <h4>Starter</h4>
-            <p style={{ fontSize: "20px", fontWeight: "600" }}>$10</p>
-            <p>100 Credits</p>
-            <button style={planButton("#22c55e")} onClick={() => buyPlan("starter")}>Buy</button>
+  
+  
+          {/* Response area */}
+          <div style={{ flex: 1, marginTop: "30px", overflowY: "auto" }}>
+            {response && (
+              <div
+                style={{
+                  padding: "16px",
+                  background: "#f1f5f9",
+                  borderRadius: "8px",
+                  boxShadow: "0 2px 6px rgba(0,0,0,0.05)"
+                }}
+              >
+                <strong>Response</strong>
+                <p>{response}</p>
+              </div>
+            )}
+  
+            {loadingExpanded && <div>Loading...</div>}
+  
+            {expandedRequest && (
+              <div
+                style={{
+                  marginTop: "16px",
+                  padding: "16px",
+                  background: "#e6f0ff",
+                  borderRadius: "8px"
+                }}
+              >
+                <strong>Prompt</strong>
+                <p>{expandedRequest.prompt}</p>
+  
+                <strong>Response</strong>
+                <p>{expandedRequest.response}</p>
+  
+                <button
+                  onClick={() => setExpandedRequest(null)}
+                  style={{
+                    marginTop: "10px",
+                    border: "none",
+                    background: PRIMARY_BLUE,
+                    color: "white",
+                    padding: "6px 12px",
+                    borderRadius: "4px",
+                    cursor: "pointer"
+                  }}
+                >
+                  Close
+                </button>
+              </div>
+            )}
           </div>
-
-          <div style={planCard(PRIMARY_BLUE)}>
-            <h4>Pro</h4>
-            <p style={{ fontSize: "20px", fontWeight: "600" }}>$20</p>
-            <p>300 Credits</p>
-            <button style={planButton(PRIMARY_BLUE)} onClick={() => buyPlan("pro")}>Buy</button>
+  
+  
+          {/* Prompt Input */}
+          <div
+            style={{
+              marginTop: "20px",
+              position: "relative"
+            }}
+          >
+            <textarea
+              placeholder="Ask AI something..."
+              value={prompt}
+              onChange={(e) => {
+                setPrompt(e.target.value);
+                e.target.style.height = "auto";
+                e.target.style.height = e.target.scrollHeight + "px";
+              }}
+              style={{
+                width: "100%",
+                resize: "none",
+                padding: "14px 50px 14px 14px",
+                borderRadius: "10px",
+                border: "1px solid #d1d5db",
+                fontSize: "15px",
+                lineHeight: "1.4",
+                minHeight: "50px",
+                maxHeight: "200px",
+                overflowY: "auto"
+              }}
+            />
+  
+            <button
+              onClick={sendPrompt}
+              style={{
+                position: "absolute",
+                right: "10px",
+                bottom: "10px",
+                border: "none",
+                background: PRIMARY_BLUE,
+                color: "white",
+                borderRadius: "6px",
+                width: "34px",
+                height: "34px",
+                cursor: "pointer",
+                fontSize: "16px"
+              }}
+            >
+              ↑
+            </button>
           </div>
-
-          <div style={planCard("#7c3aed")}>
-            <h4>Enterprise</h4>
-            <p style={{ fontSize: "20px", fontWeight: "600" }}>$50</p>
-            <p>1500 Credits</p>
-            <button style={planButton("#7c3aed")} onClick={() => buyPlan("enterprise")}>Buy</button>
+  
+  
+          {/* Plans */}
+          <div style={{ marginTop: "30px" }}>
+            <h3 style={{ color: PRIMARY_BLUE }}>Upgrade Plan</h3>
+  
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: "20px" }}>
+  
+              <div style={planCard("#22c55e")}>
+                <h4>Starter</h4>
+                <p style={{ fontSize: "20px", fontWeight: "600" }}>$10</p>
+                <p>100 Credits</p>
+                <button style={planButton("#22c55e")} onClick={() => buyPlan("starter")}>
+                  Buy
+                </button>
+              </div>
+  
+              <div style={planCard(PRIMARY_BLUE)}>
+                <h4>Pro</h4>
+                <p style={{ fontSize: "20px", fontWeight: "600" }}>$20</p>
+                <p>300 Credits</p>
+                <button style={planButton(PRIMARY_BLUE)} onClick={() => buyPlan("pro")}>
+                  Buy
+                </button>
+              </div>
+  
+              <div style={planCard("#7c3aed")}>
+                <h4>Enterprise</h4>
+                <p style={{ fontSize: "20px", fontWeight: "600" }}>$50</p>
+                <p>1500 Credits</p>
+                <button style={planButton("#7c3aed")} onClick={() => buyPlan("enterprise")}>
+                  Buy
+                </button>
+              </div>
+  
+            </div>
           </div>
-
+  
         </div>
-
-        <button
-          style={{ ...primaryButton, background: "#374151", marginTop: "30px" }}
-          onClick={logout}
-        >
-          Logout
-        </button>
       </div>
     );
   }
