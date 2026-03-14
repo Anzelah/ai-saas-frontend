@@ -75,7 +75,7 @@ export default function App() {
 
   const loadDashboard = async (jwt) => {
     try {
-      const me = await axios.get(`${BACKEND_URL}user/me`, {
+      const me = await axios.get(`${BACKEND_URL}/user/me`, {
         headers: { Authorization: `Bearer ${jwt}` }
       });
 
@@ -142,7 +142,7 @@ export default function App() {
       setLoading(true);
       setError("");
 
-      await axios.post(`${BACKEND_URL}auth/forgot-password`, {
+      await axios.post(`${BACKEND_URL}/auth/forgot-password`, {
         email
       });
 
