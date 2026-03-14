@@ -544,37 +544,42 @@ export default function App() {
         >
   
           {/* Top bar */}
-          <div style={{ display: "flex", justifyContent: "space-between" }}>
-            <div>
-              {user && <strong>Credits: {user.credits}</strong>}
-            </div>
-  
-            <button
-              onClick={logout}
-              style={{
-                border: "none",
-                background: "#374151",
-                color: "white",
-                padding: "8px 14px",
-                borderRadius: "6px",
-                cursor: "pointer"
-              }}
-            >
-              Logout
-            </button>
-          </div>
-
-          {/* Heading area */}
-          <div style={{ textAlign: "center", marginTop: "30px", marginBottom: "30px" }}>
-            <h2 style={{ color: PRIMARY_BLUE, marginBottom: "6px" }}>
+          {/* Header */}
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+              marginBottom: "30px"
+            }}
+          >
+            {/* Product title */}
+            <h2 style={{ color: PRIMARY_BLUE, margin: 0 }}>
             Generate professional business plans in seconds
             </h2>
 
-            {user && (
-              <div style={{ color: "#555", fontSize: "14px" }}>
-                Credits remaining: <strong>{user.credits}</strong>
-              </div>
-            )}
+            {/* Right side controls */}
+            <div style={{ display: "flex", alignItems: "center", gap: "16px" }}>
+              {user && (
+                <span style={{ fontSize: "14px", color: "#444" }}>
+                  Credits: <strong>{user.credits}</strong>
+                </span>
+              )}
+
+              <button
+                onClick={logout}
+                style={{
+                  border: "none",
+                  background: "#374151",
+                  color: "white",
+                  padding: "8px 14px",
+                  borderRadius: "6px",
+                  cursor: "pointer"
+                }}
+              >
+                Logout
+              </button>
+            </div>
           </div>
   
           {/* Response area */}
