@@ -650,7 +650,7 @@ export default function App() {
                 e.target.style.height = e.target.scrollHeight + "px";
               }}
               style={{
-                width: "100%",
+                width: "calc(100% - 50px)",
                 resize: "none",
                 padding: "14px 50px 14px 14px",
                 borderRadius: "10px",
