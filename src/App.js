@@ -469,17 +469,19 @@ export default function App() {
     return (
       <div style={container}>
         <h2 style={{ color: PRIMARY_BLUE }}>Reset Password</h2>
-
+  
         {error && <p style={errorStyle}>{error}</p>}
         {success && <p style={successStyle}>{success}</p>}
-
+  
+        {/* Reset Token Input */}
         <input
           style={input}
           placeholder="Reset Token"
-          value={resetToken}
+          value={resetToken}        // <-- auto-filled here
           onChange={(e) => setResetToken(e.target.value)}
         />
-
+  
+        {/* New Password Input */}
         <input
           style={input}
           type="password"
@@ -487,14 +489,14 @@ export default function App() {
           value={newPassword}
           onChange={(e) => setNewPassword(e.target.value)}
         />
-
+  
         <button style={primaryButton} onClick={resetPassword}>
           Reset Password
         </button>
       </div>
     );
   }
-
+  
   if (view === "dashboard") {
     return (
       <div style={{ display: "flex", height: "100vh", fontFamily: "system-ui" }}>
