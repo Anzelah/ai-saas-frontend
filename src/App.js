@@ -38,7 +38,7 @@ export default function App() {
     setEmail("");
     setPassword("");
     setNewPassword("");
-    setResetToken("");
+    //setResetToken("");
   };
 
   const handleError = (err) => {
@@ -146,7 +146,7 @@ export default function App() {
       const res = await axios.post(`${BACKEND_URL}/auth/forgot-password`, { email });
   
       // Use the demo token from backend
-      setResetToken(res.data.demoResetToken || "");
+      setResetToken(res.data.demoResetToken || "None");
 
       setSuccess("Password reset token sent to your email (auto-filled for demo).");
       setView("reset");
