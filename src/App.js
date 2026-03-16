@@ -137,16 +137,21 @@ export default function App() {
     }
   };
 
+  //Added 
   const requestReset = async () => {
     try {
       setLoading(true);
       setError("");
-
-      await axios.post(`${BACKEND_URL}/auth/forgot-password`, {
-        email
-      });
-
-      setSuccess("Password reset token sent to your email.");
+  
+      const res = await axios.post(`${BACKEND_URL}/auth/forgot-password`, { email });
+  
+      setSuccess(res.data.message);
+  
+      // Auto-fill the reset token for demo
+      if (res.data.demoResetToken) {
+        setResetToken(res.data.demoResetToken); // auto-fills the reset input field
+      }
+  
       setView("reset");
     } catch (err) {
       handleError(err);
