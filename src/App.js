@@ -145,13 +145,10 @@ export default function App() {
   
       const res = await axios.post(`${BACKEND_URL}/auth/forgot-password`, { email });
   
-      setSuccess(res.data.message);
-  
-      // Auto-fill the reset token for demo
-      if (res.data.demoResetToken) {
-        setResetToken(res.data.demoResetToken); // auto-fills the reset input field
-      }
-  
+      // Use the demo token from backend
+      setResetToken(res.data.demoResetToken || "");
+
+      setSuccess("Password reset token sent to your email (auto-filled for demo).");
       setView("reset");
     } catch (err) {
       handleError(err);
@@ -496,7 +493,7 @@ export default function App() {
       </div>
     );
   }
-  
+
   if (view === "dashboard") {
     return (
       <div style={{ display: "flex", height: "100vh", fontFamily: "system-ui" }}>
