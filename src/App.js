@@ -27,6 +27,10 @@ export default function App() {
   const [expandedRequest, setExpandedRequest] = useState(null); // store the full AI response
   const [loadingExpanded, setLoadingExpanded] = useState(false); // optional loading state
 
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [showNewPassword, setShowNewPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+
   useEffect(() => {
     if (token) {
       loadDashboard(token);
@@ -164,13 +168,17 @@ export default function App() {
 
       await axios.post(`${BACKEND_URL}/auth/reset-password`, {
         token: resetToken,
-        newPassword
+        newPassword,
+        confirmPassword
       });
-
-      clearAuthFields();
 
       handleSuccess("Password reset successful. Please login.");
       setView("login");
+
+      // Clear fields
+      setNewPassword("");
+      setConfirmPassword("");
+      setResetToken("");
     } catch (err) {
       handleError(err);
     } finally {
@@ -470,22 +478,60 @@ export default function App() {
         {error && <p style={errorStyle}>{error}</p>}
         {success && <p style={successStyle}>{success}</p>}
   
-        {/* Reset Token Input */}
-        <input
-          style={input}
-          placeholder="Reset Token"
-          value={resetToken}        // <-- auto-filled here
-          onChange={(e) => setResetToken(e.target.value)}
-        />
-  
-        {/* New Password Input */}
+        {/* 🔒 Reset Token (hidden) */}
         <input
           style={input}
           type="password"
-          placeholder="New Password"
-          value={newPassword}
-          onChange={(e) => setNewPassword(e.target.value)}
+          placeholder="Reset Token"
+          value={resetToken}
+          onChange={(e) => setResetToken(e.target.value)}
         />
+  
+        {/* 🔑 New Password */}
+        <div style={{ position: "relative" }}>
+          <input
+            style={input}
+            type={showNewPassword ? "text" : "password"}
+            placeholder="New Password"
+            value={newPassword}
+            onChange={(e) => setNewPassword(e.target.value)}
+          />
+          <span
+            onClick={() => setShowNewPassword(!showNewPassword)}
+            style={{
+              position: "absolute",
+              right: "10px",
+              top: "50%",
+              transform: "translateY(-50%)",
+              cursor: "pointer"
+            }}
+          >
+            👁
+          </span>
+        </div>
+  
+        {/* 🔁 Confirm Password */}
+        <div style={{ position: "relative" }}>
+          <input
+            style={input}
+            type={showConfirmPassword ? "text" : "password"}
+            placeholder="Confirm Password"
+            value={confirmPassword}
+            onChange={(e) => setConfirmPassword(e.target.value)}
+          />
+          <span
+            onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+            style={{
+              position: "absolute",
+              right: "10px",
+              top: "50%",
+              transform: "translateY(-50%)",
+              cursor: "pointer"
+            }}
+          >
+            👁
+          </span>
+        </div>
   
         <button style={primaryButton} onClick={resetPassword}>
           Reset Password
