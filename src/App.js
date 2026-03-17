@@ -31,6 +31,9 @@ export default function App() {
   const [showNewPassword, setShowNewPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
+  // ✅ Add this right here
+  const passwordsMismatch = newPassword !== confirmPassword && confirmPassword.length > 0;
+
   useEffect(() => {
     if (token) {
       loadDashboard(token);
@@ -532,8 +535,18 @@ export default function App() {
             👁
           </span>
         </div>
+
+        {passwordsMismatch && (
+          <p style={{ color: "#dc2626", fontSize: "12px", marginTop: "4px" }}>
+            Passwords do not match
+          </p>
+        )}
   
-        <button style={primaryButton} onClick={resetPassword}>
+        <button
+          style={primaryButton}
+          onClick={resetPassword}
+          disabled={passwordsMismatch || !newPassword || !confirmPassword || loading}
+        >
           Reset Password
         </button>
       </div>
