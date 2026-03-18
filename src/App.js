@@ -39,7 +39,7 @@ export default function App() {
       loadDashboard(token);
       setView("dashboard");
     }
-  }, [token]);
+  }, []);
 
   const clearAuthFields = () => {
     setEmail("");
@@ -425,17 +425,43 @@ export default function App() {
           onChange={(e) => setEmail(e.target.value)}
         />
 
-        <input
-          style={input}
-          type="password"
-          placeholder="Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
+        <div style={{ position: "relative", marginTop: "8px", width: "100%" }}>
+          <input
+            style={{
+              ...input,
+              paddingRight: "40px", // space for eye
+              marginTop: 0,
+              boxSizing: "border-box", // important!
+            }}
+            type={showPassword ? "text" : "password"}
+            placeholder="Password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
 
-        <small>
-          Password must be at least 8 characters, include one uppercase and one special character.
-        </small>
+          {/* Eye toggle inside input */}
+          <span
+            onClick={() => setShowPassword(!showPassword)}
+            style={{
+              position: "absolute",
+              right: "12px",
+              top: "10%",
+              transform: "translateY(-50%)",
+              cursor: "pointer",
+              fontSize: "16px",
+              userSelect: "none",
+            }}
+          >
+            {showPassword ? "🙈" : "👁"}
+          </span>
+
+          {/* Password hints */}
+          <small style={{ display: "block", marginTop: "6px", color: "#16a34a", lineHeight: "1.5" }}>
+            Password must be at least 8 characters<br />
+            Password must contain at least 1 uppercase letter<br />
+            {"Password must contain at least 1 special character: !@#$%^&*()?:{}|<></>"}
+          </small>
+        </div>
 
         <button style={primaryButton} onClick={register}>
           Create Account
@@ -626,8 +652,11 @@ export default function App() {
             <div style={{ display: "flex", alignItems: "center", gap: "16px" }}>
               {user && (
                 <span style={{ fontSize: "14px", color: "#444" }}>
-                  Credits: <strong>{user?.credits ?? "..."}</strong>
+                Credits:{" "}
+                <span style={{ color: "#1e3a8a", fontWeight: "600" }}>
+                  {user?.credits ?? "..."}
                 </span>
+              </span>
               )}
 
               <button
