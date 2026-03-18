@@ -91,7 +91,7 @@ export default function App() {
       const historyRes = await axios.get(`${BACKEND_URL}/ai/history`, {
         headers: { Authorization: `Bearer ${jwt}` }
       });
-      
+
       setHistory(historyRes.data.data || []);
     } catch (err) {
       handleError(err);
@@ -242,10 +242,6 @@ export default function App() {
       handleError(err);
     }
   };
-
-  useEffect(() => {
-    console.log("🚀 User updated:", user);
-  }, [user]);
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
