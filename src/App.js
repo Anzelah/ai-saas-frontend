@@ -39,7 +39,7 @@ export default function App() {
       loadDashboard(token);
       setView("dashboard");
     }
-  }, []);
+  }, [token]);
 
   const clearAuthFields = () => {
     setEmail("");
@@ -86,17 +86,18 @@ export default function App() {
         headers: { Authorization: `Bearer ${jwt}` }
       });
 
+      setUser(me.data);
+
       const historyRes = await axios.get(`${BACKEND_URL}/ai/history`, {
         headers: { Authorization: `Bearer ${jwt}` }
       });
-
-      setUser(me.data);
+      
       setHistory(historyRes.data.data || []);
     } catch (err) {
       handleError(err);
     }
   };
-
+  
   const login = async () => {
     try {
       setLoading(true);
@@ -241,6 +242,10 @@ export default function App() {
       handleError(err);
     }
   };
+
+  useEffect(() => {
+    console.log("🚀 User updated:", user);
+  }, [user]);
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
@@ -625,7 +630,7 @@ export default function App() {
             <div style={{ display: "flex", alignItems: "center", gap: "16px" }}>
               {user && (
                 <span style={{ fontSize: "14px", color: "#444" }}>
-                  Credits: <strong>{user.credits}</strong>
+                  Credits: <strong>{user?.credits ?? "..."}</strong>
                 </span>
               )}
 
