@@ -457,9 +457,9 @@ export default function App() {
 
           {/* Password hints */}
           <small style={{ display: "block", marginTop: "6px", color: "#16a34a", lineHeight: "1.5" }}>
-            Password must be at least 8 characters<br />
-            Password must contain at least 1 uppercase letter<br />
-            {"Password must contain at least 1 special character: !@#$%^&*()?:{}|<></>"}
+            Must be at least 8 characters<br />
+            Must contain at least 1 uppercase letter<br />
+            {"Must contain at least 1 special character: !@#$%^&*()?:{}|<></>"}
           </small>
         </div>
 
@@ -645,7 +645,7 @@ export default function App() {
           >
             {/* Product title */}
             <h2 style={{ color: PRIMARY_BLUE, margin: 0 }}>
-            Generate professional business plans in seconds
+            Generate a cover letter in seconds
             </h2>
 
             {/* Right side controls */}
@@ -735,7 +735,7 @@ export default function App() {
             }}
           >
             <textarea
-              placeholder="Ask AI something..."
+              placeholder="Paste your job description here and get a tailored cover letter"
               value={prompt}
               onChange={(e) => {
                 setPrompt(e.target.value);
