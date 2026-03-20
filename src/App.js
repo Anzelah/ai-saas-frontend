@@ -199,6 +199,7 @@ export default function App() {
         { prompt },
         { headers: { Authorization: `Bearer ${token}` } }
       );
+      console.log("AI RESPONSE:", res.data);
 
       setResponse(res.data.response);
 
@@ -676,7 +677,7 @@ export default function App() {
           </div>
   
           {/* Response area */}
-          <div style={{ flex: 1, marginTop: "30px", overflowY: "auto" }}>
+          <div style={{ marginTop: "30px" }}>
             {response && (
               <div
                 style={{
@@ -735,7 +736,7 @@ export default function App() {
             }}
           >
             <textarea
-              placeholder="Paste your job description here and get a tailored cover letter"
+              placeholder="Paste your job description here and get a tailored cover letter..."
               value={prompt}
               onChange={(e) => {
                 setPrompt(e.target.value);
