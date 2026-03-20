@@ -31,6 +31,8 @@ export default function App() {
   const [showNewPassword, setShowNewPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
+  const [messages, setMessages] = useState([]);
+
   // ✅ Add this right here
   const passwordsMismatch = newPassword !== confirmPassword && confirmPassword.length > 0;
 
@@ -191,23 +193,32 @@ export default function App() {
   };
 
   const sendPrompt = async () => {
+    if (!prompt.trim()) return; // don't send empty messages
+  
     try {
       setLoading(true);
-
+  
+      // 1️⃣ Add user's message to chat
+      setMessages((prev) => [...prev, { type: "user", content: prompt }]);
+  
+      // 2️⃣ Send prompt to backend
       const res = await axios.post(
         `${BACKEND_URL}/ai/generate`,
         { prompt },
         { headers: { Authorization: `Bearer ${token}` } }
       );
-      console.log("AI RESPONSE:", res.data);
-
-      setResponse(res.data.response);
-
+  
+      // 3️⃣ Add AI response to chat
+      setMessages((prev) => [...prev, { type: "ai", content: res.data.response }]);
+  
+      // 4️⃣ Update history
       const historyRes = await axios.get(`${BACKEND_URL}/ai/history`, {
         headers: { Authorization: `Bearer ${token}` }
       });
-
       setHistory(historyRes.data.data || []);
+  
+      // 5️⃣ Clear input box
+      setPrompt("");
     } catch (err) {
       handleError(err);
     } finally {
@@ -676,105 +687,133 @@ export default function App() {
             </div>
           </div>
   
-          {/* Response area */}
-          <div style={{ marginTop: "30px" }}>
-            {response && (
-              <div
-                style={{
-                  padding: "16px",
-                  background: "#f1f5f9",
-                  borderRadius: "8px",
-                  boxShadow: "0 2px 6px rgba(0,0,0,0.05)"
-                }}
-              >
-                <strong>Response</strong>
-                <p>{response}</p>
-              </div>
-            )}
-  
-            {loadingExpanded && <div>Loading...</div>}
-  
-            {expandedRequest && (
-              <div
-                style={{
-                  marginTop: "16px",
-                  padding: "16px",
-                  background: "#e6f0ff",
-                  borderRadius: "8px"
-                }}
-              >
-                <strong>Prompt</strong>
-                <p>{expandedRequest.prompt}</p>
-  
-                <strong>Response</strong>
-                <p>{expandedRequest.response}</p>
-  
-                <button
-                  onClick={() => setExpandedRequest(null)}
+          {/* Chat Messages + Input / New Cover Letter Button */}
+          <div
+            style={{
+              flex: 1,
+              display: "flex",
+              flexDirection: "column",
+              padding: "16px",
+              gap: "10px",
+              height: "100%",
+            }}
+          >
+            {/* Scrollable messages */}
+            <div
+              style={{
+                flex: 1,
+                overflowY: "auto",
+                display: "flex",
+                flexDirection: "column",
+                gap: "10px",
+                paddingBottom: "10px",
+              }}
+            >
+            {(messages || []).map((msg, i) => {
+              const isLatestAI = msg.type === "ai" && i === messages.length - 1;
+
+              return (
+                <div
+                  key={i}
                   style={{
-                    marginTop: "10px",
+                    alignSelf: msg.type === "user" ? "flex-start" : "flex-end",
+                    background: msg.type === "user" ? "#e5e7eb" : PRIMARY_BLUE,
+                    color: msg.type === "user" ? "#111" : "white",
+                    padding: "10px 14px",
+                    borderRadius: "16px",
+                    maxWidth: "70%",
+                    wordBreak: "break-word",
+                    display: "flex",
+                    flexDirection: "column",
+                  }}
+                >
+                  {/* Copy button at top of latest AI response */}
+                  {isLatestAI && (
+                    <div style={{ display: "flex", justifyContent: "flex-end", marginBottom: "6px" }}>
+                      <button
+                        onClick={() => navigator.clipboard.writeText(msg.content)}
+                        style={{
+                          border: "none",
+                          background: "white",
+                          color: "#1e3a8a",
+                          borderRadius: "4px",
+                          padding: "2px 6px",
+                          fontSize: "12px",
+                          cursor: "pointer",
+                        }}
+                      >
+                        Copy
+                      </button>
+                    </div>
+                  )}
+
+                  {/* Actual message content */}
+                  <div>{msg.content}</div>
+                </div>
+              );
+            })}
+            </div>
+
+            {/* Input Box or New Cover Letter Button */}
+            {!messages.some((m) => m.type === "ai") ? (
+              <div style={{ display: "flex", gap: "8px", marginTop: "10px" }}>
+                <textarea
+                  placeholder="Paste your job description here and get a tailored cover letter..."
+                  value={prompt}
+                  onChange={(e) => {
+                    setPrompt(e.target.value);
+                    e.target.style.height = "auto";
+                    e.target.style.height = e.target.scrollHeight + "px";
+                  }}
+                  style={{
+                    flex: 1,
+                    resize: "none",
+                    padding: "14px",
+                    borderRadius: "12px",
+                    border: "1px solid #d1d5db",
+                    fontSize: "15px",
+                    lineHeight: "1.4",
+                    minHeight: "50px",
+                    maxHeight: "200px",
+                    overflowY: "auto",
+                  }}
+                />
+                <button
+                  onClick={sendPrompt}
+                  style={{
                     border: "none",
                     background: PRIMARY_BLUE,
                     color: "white",
-                    padding: "6px 12px",
-                    borderRadius: "4px",
-                    cursor: "pointer"
+                    borderRadius: "12px",
+                    width: "48px",
+                    height: "48px",
+                    cursor: "pointer",
+                    fontSize: "18px",
                   }}
                 >
-                  Close
+                  ↑
                 </button>
               </div>
+            ) : (
+              <button
+                onClick={() => {
+                  setMessages([]);
+                  setPrompt("");
+                }}
+                style={{
+                  width: "100%",
+                  padding: "12px",
+                  borderRadius: "12px",
+                  border: "none",
+                  background: PRIMARY_BLUE,
+                  color: "white",
+                  cursor: "pointer",
+                  fontSize: "15px",
+                }}
+              >
+                Generate Another Cover Letter
+              </button>
             )}
-          </div>
-  
-  
-          {/* Prompt Input */}
-          <div
-            style={{
-              marginTop: "20px",
-              position: "relative"
-            }}
-          >
-            <textarea
-              placeholder="Paste your job description here and get a tailored cover letter..."
-              value={prompt}
-              onChange={(e) => {
-                setPrompt(e.target.value);
-                e.target.style.height = "auto";
-                e.target.style.height = e.target.scrollHeight + "px";
-              }}
-              style={{
-                width: "calc(100% - 50px)",
-                resize: "none",
-                padding: "14px 50px 14px 14px",
-                borderRadius: "10px",
-                border: "1px solid #d1d5db",
-                fontSize: "15px",
-                lineHeight: "1.4",
-                minHeight: "50px",
-                maxHeight: "200px",
-                overflowY: "auto"
-              }}
-            />
-  
-            <button
-              onClick={sendPrompt}
-              style={{
-                position: "absolute",
-                right: "10px",
-                bottom: "10px",
-                border: "none",
-                background: PRIMARY_BLUE,
-                color: "white",
-                borderRadius: "6px",
-                width: "34px",
-                height: "34px",
-                cursor: "pointer",
-                fontSize: "16px"
-              }}
-            >
-              ↑
-            </button>
           </div>
   
   
