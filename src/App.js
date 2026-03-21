@@ -3,6 +3,10 @@ import axios from "axios";
 
 const BACKEND_URL = "https://ai-saas-backend-f8bt.onrender.com";
 const PRIMARY_BLUE = "#1e3a8a";
+const ACCENT = "#7c3aed";         // soft purple (elegant, not loud)
+const DARK = "#111827";           // main text
+const MUTED = "#6b7280";          // secondary text
+const BG_LIGHT = "#f8fafc";
 
 export default function App() {
   const [view, setView] = useState("login");
@@ -615,7 +619,7 @@ export default function App() {
             overflowY: "auto"
           }}
         >
-          <h3 style={{ color: PRIMARY_BLUE, marginBottom: "12px" }}>History</h3>
+          <h3 style={{ color: MUTED, marginBottom: "12px" }}>History</h3>
   
           {history.map((item, i) => (
             <div
@@ -665,7 +669,7 @@ export default function App() {
             }}
           >
             {/* Product title */}
-            <h2 style={{ color: PRIMARY_BLUE, margin: 0 }}>
+            <h2 style={{ color: DARK, margin: 0 }}>
             Generate a cover letter in seconds
             </h2>
 
@@ -674,7 +678,7 @@ export default function App() {
               {user && (
                 <span style={{ fontSize: "14px", color: "#444" }}>
                 Credits:{" "}
-                <span style={{ color: "#1e3a8a", fontWeight: "600" }}>
+                <span style={{ color: "ACCENT", fontWeight: "600" }}>
                   {user?.credits ?? "..."}
                 </span>
               </span>
