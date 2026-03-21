@@ -631,7 +631,7 @@ export default function App() {
               }}
             >
               <div style={{ fontSize: "13px", fontWeight: "600" }}>
-                {item.prompt.slice(0, 40)}...
+                {item.prompt.split(" ").slice(0, 6).join(" ")}...
               </div>
   
               <div style={{ fontSize: "11px", color: "#666" }}>
