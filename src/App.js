@@ -233,9 +233,18 @@ export default function App() {
       const res = await axios.get(`${BACKEND_URL}/ai/${id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
-      setExpandedRequest(res.data); // set full response
+  
+      const data = res.data;
+  
+      // 🔥 Convert to chat format
+      setMessages([
+        { type: "user", content: data.prompt },
+        { type: "ai", content: data.response },
+      ]);
+  
+      setExpandedRequest(data); // optional (you can keep or remove later)
     } catch (err) {
-      handleError(err); // show backend error
+      handleError(err);
     } finally {
       setLoadingExpanded(false);
     }
