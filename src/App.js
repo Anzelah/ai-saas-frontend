@@ -273,7 +273,7 @@ export default function App() {
     const stripeStatus = params.get("stripe");
   
     if (stripeStatus === "success") {
-      setSuccess("Payment successful! Your credits have been updated.");
+      handleSuccess("Payment successful! Your credits have been updated.");
     } else if (stripeStatus === "cancel") {
       setError("Payment canceled. No credits were added.");
     }
