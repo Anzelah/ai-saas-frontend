@@ -275,7 +275,7 @@ export default function App() {
     if (stripeStatus === "success") {
       handleSuccess("Payment successful! Your credits have been updated.");
     } else if (stripeStatus === "cancel") {
-      setError("Payment canceled. No credits were added.");
+      handleError("Payment canceled. No credits were added.");
     }
   
     // Remove the query string from URL so it doesn't show again on refresh
