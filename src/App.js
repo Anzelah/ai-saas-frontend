@@ -6,7 +6,7 @@ const PRIMARY_BLUE = "#1e3a8a";
 const ACCENT = "#7c3aed";         // soft purple (elegant, not loud)
 const DARK = "#111827";           // main text
 const MUTED = "#6b7280";          // secondary text
-const BG_LIGHT = "#f8fafc";
+// const BG_LIGHT = "#f8fafc";
 
 export default function App() {
   const [view, setView] = useState("login");
@@ -678,7 +678,7 @@ export default function App() {
               {user && (
                 <span style={{ fontSize: "14px", color: "#444" }}>
                 Credits:{" "}
-                <span style={{ color: "ACCENT", fontWeight: "600" }}>
+                <span style={{ color: ACCENT, fontWeight: "600" }}>
                   {user?.credits ?? "..."}
                 </span>
               </span>
