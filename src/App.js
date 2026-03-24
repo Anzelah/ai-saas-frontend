@@ -834,7 +834,7 @@ export default function App() {
           <div style={{ marginTop: "30px" }}>
             <h3 style={{ color: PRIMARY_BLUE }}>Upgrade Plan</h3>
   
-            <div style={{ display: "grid", gridTemplateColumns: "250px 250px 250px", gap: "20px" }}>
+            <div style={{ display: "grid", gridTemplateColumns: "250px 250px 250px", gap: "30px" }}>
   
               <div style={planCard("#22c55e")}>
                 <h4>Starter</h4>
