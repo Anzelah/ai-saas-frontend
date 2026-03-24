@@ -834,7 +834,7 @@ export default function App() {
           <div style={{ marginTop: "30px" }}>
             <h3 style={{ color: PRIMARY_BLUE }}>Upgrade Plan</h3>
   
-            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: "20px" }}>
+            <div style={{ display: "grid", gridTemplateColumns: "250px 250px 250px", gap: "20px" }}>
   
               <div style={planCard("#22c55e")}>
                 <h4>Starter</h4>
@@ -857,7 +857,7 @@ export default function App() {
               <div style={planCard("#7c3aed")}>
                 <h4>Enterprise</h4>
                 <p style={{ fontSize: "20px", fontWeight: "600" }}>$50</p>
-                <p>1500 Credits</p>
+                <p>1000 Credits</p>
                 <button style={planButton("#7c3aed")} onClick={() => buyPlan("enterprise")}>
                   Buy
                 </button>
